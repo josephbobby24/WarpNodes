@@ -1,0 +1,4 @@
+name: WarpNodes
+version: '${project.version}'
+main: me.joseph.warpnodes.WarpNodes
+api-version: '1.21.11'
