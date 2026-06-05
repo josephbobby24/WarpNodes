@@ -19,9 +19,10 @@ public class WarpUtil {
                 if (seconds >= 10) {
                     for (Entity entity: location.getNearbyEntities(radius, radius, radius)) {
                         if (!(entity instanceof LivingEntity livingEntity)) continue;
-                        world.playSound(toTeleport, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                         world.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                         livingEntity.teleport(toTeleport);
+                        world.playSound(toTeleport, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+
                     }
                     cancel();
                     return;
