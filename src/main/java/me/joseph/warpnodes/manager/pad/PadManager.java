@@ -45,9 +45,11 @@ public class PadManager {
     }
 
     public void showGui(Player player, Pad pad) {
-        List<Pad> targets = pad.getTargetPads().stream().map(r -> {
-            return this.plugin.getPadManager().getPad(r);
-        }).toList();
+        List<Pad> targets = pad
+                .getTargetPads()
+                .stream()
+                .map(r -> this.plugin.getPadManager().getPad(r))
+                .toList();
 
         Gui gui = Gui.gui()
                 .title(
