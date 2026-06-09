@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 @CommandAlias("warp")
 public class WarpCommand extends BaseCommand {
 
-    private WarpNodes plugin;
+    private final WarpNodes plugin;
 
     public WarpCommand(WarpNodes plugin) {
         this.plugin = plugin;

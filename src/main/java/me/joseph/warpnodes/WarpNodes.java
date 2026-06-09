@@ -8,9 +8,9 @@ import me.joseph.warpnodes.manager.pad.PadManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@Getter
 public final class WarpNodes extends JavaPlugin {
 
-    @Getter
     private PadManager padManager;
 
     @Override
