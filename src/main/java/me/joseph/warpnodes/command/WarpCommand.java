@@ -16,6 +16,13 @@ public class WarpCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
+    @Subcommand("item")
+    public void item(Player player) {
+        player.getInventory().addItem(
+                this.plugin.getPadManager().getItem()
+        );
+    }
+
     @Subcommand("link")
     public void linkPads(Player player, int padId, int targetPadId) {
         Pad pad = this.plugin.getPadManager().getPad(padId);

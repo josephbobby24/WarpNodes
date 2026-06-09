@@ -2,15 +2,18 @@ package me.joseph.warpnodes.manager.pad;
 
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
+import lombok.Getter;
 import me.joseph.warpnodes.WarpNodes;
 import me.joseph.warpnodes.manager.util.WarpUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -21,9 +24,12 @@ public class PadManager {
 
     private WarpNodes plugin;
     private final HashMap<Integer, Pad> pads = new HashMap<>();
+    @Getter
+    private ItemStack item;
 
     public PadManager(WarpNodes plugin) {
         this.plugin = plugin;
+        this.item = createWarpButton();
     }
 
     public int createPad(Player player, Location location) {
@@ -111,5 +117,21 @@ public class PadManager {
 
     public Optional<Pad> getPad(double x, double y, double z) {
         return this.pads.values().stream().filter(r -> r.getX() == x && r.getY() == y && r.getZ() == z).findFirst();
+    }
+
+    public ItemStack createWarpButton() {
+        ItemStack item = new ItemStack(Material.STONE_BUTTON);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.displayName(Component.text("Warp Button"));
+
+        meta.getPersistentDataContainer().set(
+                new NamespacedKey(plugin, "warp_item"),
+                PersistentDataType.INTEGER,
+                1
+        );
+
+        item.setItemMeta(meta);
+        return item;
     }
 }
