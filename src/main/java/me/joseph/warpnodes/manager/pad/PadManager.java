@@ -68,8 +68,11 @@ public class PadManager {
 
             GuiItem item = new GuiItem(itemStack);
             item.setAction(e -> {
-                e.setCancelled(true);
+                if (pad.isWarping()) {
+                    return;
+                }
                 e.getClickedInventory().close();
+                this.setWarping(pad, true);
                 WarpUtil.warp(
                         this.plugin,
                         e.getWhoClicked().getLocation(),
@@ -87,5 +90,9 @@ public class PadManager {
         });
 
         gui.open(player);
+    }
+
+    public void setWarping(Pad pad, boolean warping) {
+        pad.setWarping(warping);
     }
 }

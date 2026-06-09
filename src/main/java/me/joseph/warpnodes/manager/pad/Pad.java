@@ -12,6 +12,7 @@ public class Pad {
 
     private int padId;
     final List<Integer> targetPads = new ArrayList<>();
+    private boolean warping = false;
 
     private UUID ownerId;
     private double x;
