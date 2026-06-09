@@ -5,14 +5,17 @@ import dev.triumphteam.gui.guis.GuiItem;
 import me.joseph.warpnodes.WarpNodes;
 import me.joseph.warpnodes.manager.util.WarpUtil;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class PadManager {
 
@@ -26,6 +29,7 @@ public class PadManager {
     public int createPad(Player player, Location location) {
         Pad pad = new Pad();
 
+        pad.setWorld(location.getWorld().getName());
         pad.setX(location.getX());
         pad.setY(location.getY());
         pad.setZ(location.getZ());
@@ -59,7 +63,7 @@ public class PadManager {
                 .create();
 
         targets.forEach(r -> {
-            Location targetLocation = new Location(player.getWorld(), r.getX(), r.getY(), r.getZ());
+            Location targetLocation = new Location(Bukkit.getWorld(r.getWorld()), r.getX(), r.getY(), r.getZ());
 
             ItemStack itemStack = new ItemStack(Material.GRAY_WOOL);
             ItemMeta meta = itemStack.getItemMeta();
@@ -68,22 +72,7 @@ public class PadManager {
 
             itemStack.setItemMeta(meta);
 
-            GuiItem item = new GuiItem(itemStack);
-            item.setAction(e -> {
-                if (pad.isWarping()) {
-                    return;
-                }
-                e.getClickedInventory().close();
-                this.setWarping(pad, true);
-                WarpUtil.warp(
-                        this.plugin,
-                        e.getWhoClicked().getLocation(),
-                        5,
-                        3,
-                        targetLocation,
-                        3
-                );
-            });
+            GuiItem item = getGuiItem(pad, itemStack, targetLocation);
 
             gui.setDefaultClickAction(e -> e.setCancelled(true));
             gui.addItem(
@@ -94,7 +83,33 @@ public class PadManager {
         gui.open(player);
     }
 
+    private @NotNull GuiItem getGuiItem(Pad pad, ItemStack itemStack, Location targetLocation) {
+        GuiItem item = new GuiItem(itemStack);
+        Location padLocation = new Location(Bukkit.getWorld(pad.getWorld()), pad.getX(), pad.getY(), pad.getZ());
+        item.setAction(e -> {
+            if (pad.isWarping()) {
+                return;
+            }
+            e.getClickedInventory().close();
+            this.setWarping(pad, true);
+            WarpUtil.warp(
+                    this.plugin,
+                    padLocation,
+                    5,
+                    3,
+                    targetLocation,
+                    3,
+                    pad
+            );
+        });
+        return item;
+    }
+
     public void setWarping(Pad pad, boolean warping) {
         pad.setWarping(warping);
+    }
+
+    public Optional<Pad> getPad(double x, double y, double z) {
+        return this.pads.values().stream().filter(r -> r.getX() == x && r.getY() == y && r.getZ() == z).findFirst();
     }
 }

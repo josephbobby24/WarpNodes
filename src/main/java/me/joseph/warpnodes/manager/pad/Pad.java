@@ -14,6 +14,7 @@ public class Pad {
     final List<Integer> targetPads = new ArrayList<>();
     private boolean warping = false;
 
+    String world;
     private UUID ownerId;
     private double x;
     private double y;

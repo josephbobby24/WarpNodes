@@ -16,15 +16,6 @@ public class WarpCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
-    @Subcommand("use")
-    public void warp(Player player, int padId) {
-        Pad pad = this.plugin.getPadManager().getPad(padId);
-
-        if (pad == null) return;
-
-        this.plugin.getPadManager().showGui(player, pad);
-    }
-
     @Subcommand("link")
     public void linkPads(Player player, int padId, int targetPadId) {
         Pad pad = this.plugin.getPadManager().getPad(padId);

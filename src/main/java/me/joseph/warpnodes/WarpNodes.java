@@ -3,6 +3,7 @@ package me.joseph.warpnodes;
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import me.joseph.warpnodes.command.WarpCommand;
+import me.joseph.warpnodes.listener.InteractListener;
 import me.joseph.warpnodes.listener.PlaceListener;
 import me.joseph.warpnodes.manager.pad.PadManager;
 import org.bukkit.plugin.PluginManager;
@@ -23,6 +24,7 @@ public final class WarpNodes extends JavaPlugin {
 
         PluginManager pluginManager = this.getServer().getPluginManager();
         pluginManager.registerEvents(new PlaceListener(this), this);
+        pluginManager.registerEvents(new InteractListener(this), this);
     }
 
     @Override

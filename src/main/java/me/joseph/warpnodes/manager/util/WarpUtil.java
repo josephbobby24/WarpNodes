@@ -1,6 +1,7 @@
 package me.joseph.warpnodes.manager.util;
 
 import me.joseph.warpnodes.WarpNodes;
+import me.joseph.warpnodes.manager.pad.Pad;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -11,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class WarpUtil {
 
-    public static void warp(WarpNodes plugin, Location location, int radius, int modifier, Location toTeleport, int size) {
+    public static void warp(WarpNodes plugin, Location location, int radius, int modifier, Location toTeleport, int size, Pad pad) {
         World world = location.getWorld();
         Location loc2 = location.clone().add(0, modifier, 0);
 
@@ -51,6 +52,7 @@ public class WarpUtil {
 
                     }
                     cancel();
+                    plugin.getPadManager().setWarping(pad, false);
                     return;
                 }
 
