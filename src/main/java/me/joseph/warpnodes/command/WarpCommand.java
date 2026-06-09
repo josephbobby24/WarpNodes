@@ -4,11 +4,8 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Subcommand;
 import me.joseph.warpnodes.WarpNodes;
-import me.joseph.warpnodes.warp.Warp;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import me.joseph.warpnodes.manager.pad.Pad;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 @CommandAlias("warp")
 public class WarpCommand extends BaseCommand {
@@ -19,48 +16,27 @@ public class WarpCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
-    @Subcommand("setup")
-    public void setup(Player player) {
+    @Subcommand("use")
+    public void warp(Player player, int padId) {
+        Pad pad = this.plugin.getPadManager().getPad(padId);
 
-        this.plugin.setSetup(player.getUniqueId(), new Warp());
-        player.sendMessage("Started warp setup");
-        player.sendMessage("Place a stone button for platform");
-        player.sendMessage("/warp set target to set the target location");
-        player.sendMessage("/warp finish to finish");
+        if (pad == null) return;
+
+        this.plugin.getPadManager().showGui(player, pad);
     }
 
-    @Subcommand("set target")
-    public void setTarget(Player player) {
-        Warp warp = this.plugin.getSetup(player.getUniqueId());
+    @Subcommand("link")
+    public void linkPads(Player player, int padId, int targetPadId) {
+        Pad pad = this.plugin.getPadManager().getPad(padId);
+        Pad target = this.plugin.getPadManager().getPad(targetPadId);
 
-        if (warp == null) {
-            player.sendMessage("Error!");
-            return;
-        }
+        if (pad == null) return;
+        if (target == null) return;
+        if (!pad.getOwnerId().toString().equals(target.getOwnerId().toString())) return;
 
-        Location location = player.getLocation();
-
-        warp.setTargetLocationX(location.getX());
-        warp.setTargetLocationY(location.getY());
-        warp.setTargetLocationZ(location.getZ());
-
-        this.plugin.setSetup(player.getUniqueId(), warp);
-        player.sendMessage("Set!");
+        this.plugin.getPadManager().addTargetPad(pad, target);
+        this.plugin.getPadManager().addTargetPad(target, pad);
+        player.sendMessage("Linked pads " + pad.getPadId() + " and " + target.getPadId());
     }
 
-    @Subcommand("finish")
-    public void finish(Player player) {
-        Warp warp = this.plugin.getSetup(player.getUniqueId());
-
-        if (warp == null) {
-            player.sendMessage("Error!");
-            return;
-        }
-
-        this.plugin.removeSetup(player.getUniqueId());
-        this.plugin.addWarp(warp);
-        player.sendMessage("Done!");
-        this.plugin.getLogger().info("P: " + warp.getPadLocationX() + ":" + warp.getPadLocationY() + ":" + warp.getPadLocationZ());
-        this.plugin.getLogger().info("T: " + warp.getTargetLocationX() + ":" + warp.getTargetLocationY() + ":" + warp.getTargetLocationZ());
-    }
 }

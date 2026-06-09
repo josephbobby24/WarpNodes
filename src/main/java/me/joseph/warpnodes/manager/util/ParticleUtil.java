@@ -1,4 +1,4 @@
-package me.joseph.warpnodes.util;
+package me.joseph.warpnodes.manager.util;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
