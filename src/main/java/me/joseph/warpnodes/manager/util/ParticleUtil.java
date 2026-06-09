@@ -117,6 +117,21 @@ public class ParticleUtil {
         }
     }
 
+    public static void spawnHorizontalCircle(World world, Location center, int radius, Particle particle) {
+        for (Location location : generateHorizontalCircleLocations(center, radius)) {
+
+            world.spawnParticle(
+                    particle,
+                    location,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0
+            );
+        }
+    }
+
     public static void drawLine(
             World world,
             Location origin,

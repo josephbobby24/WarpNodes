@@ -21,6 +21,28 @@ public class WarpUtil {
             @Override
             public void run() {
                 if (seconds >= 10) {
+                    new BukkitRunnable() {
+                        int duration = 0;
+
+                        @Override
+                        public void run() {
+                            if (duration >= 3) {
+                                cancel();
+                                return;
+                            }
+
+                            for (int i = 0; i < 10; i++) {
+                                ParticleUtil.spawnHorizontalCircle(
+                                        world,
+                                        toTeleport.clone().add(0, i, 0),
+                                        radius,
+                                        Particle.END_ROD
+                                );
+                            }
+
+                            duration ++;
+                        }
+                    }.runTaskTimer(plugin, 0, 20);
                     for (Entity entity: location.getNearbyEntities(radius, radius, radius)) {
                         if (!(entity instanceof LivingEntity livingEntity)) continue;
                         world.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
